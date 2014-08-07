@@ -41,7 +41,7 @@ module.exports = function (opts) {
     function write (row, enc, next) {
         if (first && opts.standalone) {
             var pre = umd.prelude(opts.standalone).trim();
-            stream.push(Buffer(pre + 'return '));
+            stream.push(Buffer('var ' + opts.standalone + ' = function () { var define, module, exports; return '));
         }
         else if (first && stream.hasExports) {
             var pre = opts.externalRequireName || 'require';
@@ -97,8 +97,7 @@ module.exports = function (opts) {
         
         if (opts.standalone) {
             stream.push(Buffer(
-                '(' + JSON.stringify(stream.standaloneModule) + ')'
-                + umd.postlude(opts.standalone)
+                '(' + JSON.stringify(stream.standaloneModule) + ')};'
             ));
         }
         
